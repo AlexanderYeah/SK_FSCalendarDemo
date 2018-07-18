@@ -9,11 +9,10 @@
 #import "ViewController.h"
 #import <FSCalendar.h>
 
-
+#import <EventKit/EventKit.h>
 @interface ViewController ()<FSCalendarDelegate, FSCalendarDataSource, FSCalendarDelegateAppearance>
 @property (nonatomic, retain) FSCalendar *calendar;// 日历控件
 @property (strong, nonatomic) NSDateFormatter *dateFormatter; // 日期格式器
-
 
 @end
 
@@ -30,6 +29,8 @@
     _calendar.delegate = self;
     _calendar.dataSource = self;
     _calendar.scrollDirection = 0;
+	_calendar.firstWeekday = 2; // 周一为第一天
+	_calendar.appearance.borderRadius = 1.0;  // 设置当前选择是圆形,0.0是正方形
     _calendar.rowHeight = 28;
     _calendar.appearance.headerDateFormat = @"yyyy年MM月";
     _calendar.appearance.headerMinimumDissolvedAlpha = 0;
@@ -39,20 +40,23 @@
     _calendar.appearance.selectionColor = [UIColor blueColor]; // 圆球的颜色
     _calendar.placeholderType = 0;
 	
-	self.calendar.accessibilityIdentifier = @"calendar";
-	
+	//self.calendar.accessibilityIdentifier = @"calendar";
+	[self.calendar selectDate:[NSDate date]];
 	[self.view addSubview:self.calendar];
+	
 	
 }
 #pragma mark - 4 Delegate Method
 // FSCalendarDelegate 选中的日期
 
-// 选中的date
-- (void)calendar:(FSCalendar *)calendar didDeselectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition
+
+- (void)calendar:(FSCalendar *)calendar didSelectDate:(NSDate *)date atMonthPosition:(FSCalendarMonthPosition)monthPosition
 {
-    NSLog(@"did deselect date %@",[self.dateFormatter stringFromDate:date]);
-	
+
+	NSLog(@"did deselect date %@",[self.dateFormatter stringFromDate:date]);
 }
+
+
 
 
 - (void)didReceiveMemoryWarning {
